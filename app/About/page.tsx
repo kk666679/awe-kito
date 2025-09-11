@@ -5,14 +5,14 @@ export default function AboutPage() {
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Skitbit International",
-    url: "https://theskitbit.com",
-    logo: "https://theskitbit.com/logo.png",
+    name: "Awan Keusahawanan International",
+    url: "https://awan-keusahawanan.com",
+    logo: "https://awan-keusahawanan.com/logo.png",
     description:
-      "Skitbit International is a 3D product animation agency serving clients in Miami, Los Angeles, New York, Canada, and the UK.",
+      "Awan Keusahawanan International is a 3D product animation agency serving clients in Miami, Los Angeles, New York, Canada, and the UK.",
     sameAs: [
-      "https://www.instagram.com/skitbit",
-      "https://www.linkedin.com/company/skitbit",
+      "https://www.instagram.com/awan-keusahawanan",
+      "https://www.linkedin.com/company/awan-keusahawanan",
     ],
     address: {
       "@type": "PostalAddress",
@@ -49,7 +49,7 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="relative bg-black text-white py-20 px-6 md:px-12 lg:px-20 text-center">
         <h1 className="text-4xl md:text-6xl font-bold mb-6">
-          About Skitbit International
+          About Awan Keusahawanan International
         </h1>
         <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-80">
           Pioneering the future of 3D product animation for global brands.
@@ -102,7 +102,7 @@ export default function AboutPage() {
           Ready to Elevate Your Brand?
         </h2>
         <p className="text-lg opacity-80 mb-8">
-          Let Skitbit International bring your products to life.
+          Let Awan Keusahawanan International bring your products to life.
         </p>
         <a
           href="/contact"

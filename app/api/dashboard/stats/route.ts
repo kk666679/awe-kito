@@ -1,8 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { getCurrentUser } from "@/lib/auth"
+import { withBusinessLogging } from "@/lib/middleware/logging"
+import { withMonitoring } from "@/lib/middleware/monitoring"
+import { withGlobalErrorHandler, withRequestValidation } from "@/lib/middleware/error"
 
-export async function GET(request: NextRequest) {
+async function handleGET(request: NextRequest) {
   try {
     const authHeader = request.headers.get("authorization")
     const token = authHeader?.replace("Bearer ", "")
@@ -141,3 +144,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Ralat dalaman pelayan" }, { status: 500 })
   }
 }
+
+export const GET = withRequestValidation(withMonitoring(withBusinessLogging(withGlobalErrorHandler(handleGET))), {
+  allowedMethods: ["GET"],
+})

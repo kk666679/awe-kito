@@ -1,10 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { withBusinessLogging } from "@/lib/middleware/logging"
+import { withMonitoring } from "@/lib/middleware/monitoring"
+import { withGlobalErrorHandler, withRequestValidation } from "@/lib/middleware/error"
 
 /**
  * Inventory Management API endpoint
  * Handles product inventory tracking within workspaces
  */
-export async function GET(request: NextRequest) {
+async function handleGET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const workspaceId = searchParams.get("workspaceId")
@@ -38,7 +41,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+async function handlePOST(request: NextRequest) {
   try {
     const { name, sku, stock, minStock, price, workspaceId } = await request.json()
 
@@ -64,3 +67,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: "Failed to create product" }, { status: 500 })
   }
 }
+
+export const GET = withRequestValidation(withMonitoring(withBusinessLogging(withGlobalErrorHandler(handleGET))), {
+  allowedMethods: ["GET"],
+})
+
+export const POST = withRequestValidation(withMonitoring(withBusinessLogging(withGlobalErrorHandler(handlePOST))), {
+  allowedMethods: ["POST"],
+  maxBodySize: 2048, // 2KB limit for inventory creation
+})

@@ -118,7 +118,7 @@ interface ActivityItem {
 const defaultContent: ContentData = {
   hero: {
     title: "HIGH-IMPACT 3D ANIMATION FOR BRANDS",
-    subtitle: "skitbit",
+    subtitle: "awan-keusahawanan",
     buttonText: "Chat With Us",
   },
   features: {
@@ -127,10 +127,10 @@ const defaultContent: ContentData = {
   },
   footer: {
     tagline: "Experience 3D animation like never before. We craft cinematic visuals for brands and products.",
-    copyright: "© 2025 — Skitbit International Uk",
+    copyright: "© 2025 — Awan Keusahawanan International Uk",
   },
   about: {
-    title: "About Skitbit International",
+    title: "About Awan Keusahawanan International",
     description: "Pioneering the future of 3D product animation for global brands.",
     mission: "To create stunning 3D animations that help brands tell their story and connect with their audience.",
     vision: "To be the world's leading 3D animation studio, known for creativity, quality, and innovation.",
@@ -230,7 +230,7 @@ const defaultContent: ContentData = {
     ],
   },
   settings: {
-    adminEmail: "admin@theskitbit.com",
+    adminEmail: "admin@awan-keusahawanan.com",
     adminPassword: "1234",
   },
 }
@@ -310,7 +310,7 @@ export default function AdminDashboard() {
       if (sessionCookie && sessionCookie.includes("authenticated")) {
         setIsAuthenticated(true)
         // Load saved content from localStorage
-        const savedContent = localStorage.getItem("skitbit-content")
+        const savedContent = localStorage.getItem("awan-keusahawanan-content")
         if (savedContent) {
           const parsedContent = JSON.parse(savedContent)
           setContent(parsedContent)
@@ -318,7 +318,7 @@ export default function AdminDashboard() {
         }
 
         // Load saved activity from localStorage
-        const savedActivity = localStorage.getItem("skitbit-activity")
+        const savedActivity = localStorage.getItem("awan-keusahawanan-activity")
         if (savedActivity) {
           setActivityItems(JSON.parse(savedActivity))
         }
@@ -413,7 +413,7 @@ export default function AdminDashboard() {
 
     try {
       // Save to localStorage
-      localStorage.setItem("skitbit-content", JSON.stringify(content))
+      localStorage.setItem("awan-keusahawanan-content", JSON.stringify(content))
 
       // Create a new activity item
       const section = selectedPage.charAt(0).toUpperCase() + selectedPage.slice(1)
@@ -438,7 +438,7 @@ export default function AdminDashboard() {
 
       const updatedActivity = [newActivity, ...activityItems.slice(0, 9)]
       setActivityItems(updatedActivity)
-      localStorage.setItem("skitbit-activity", JSON.stringify(updatedActivity))
+      localStorage.setItem("awan-keusahawanan-activity", JSON.stringify(updatedActivity))
 
       // Update original content to match current content
       setOriginalContent(JSON.parse(JSON.stringify(content)))
@@ -1522,8 +1522,8 @@ export default function AdminDashboard() {
                   className="bg-red-600 hover:bg-red-700"
                   onClick={() => {
                     if (confirm("Are you sure you want to reset all dashboard data? This cannot be undone.")) {
-                      localStorage.removeItem("skitbit-content")
-                      localStorage.removeItem("skitbit-activity")
+                      localStorage.removeItem("awan-keusahawanan-content")
+                      localStorage.removeItem("awan-keusahawanan-activity")
                       setContent(defaultContent)
                       setOriginalContent(defaultContent)
                       setActivityItems(initialActivity)
@@ -1602,7 +1602,7 @@ export default function AdminDashboard() {
               <CardContent className="space-y-4">
                 <div>
                   <p className="text-white font-medium">Email Support</p>
-                  <p className="text-neutral-400 text-sm">admin@theskitbit.com</p>
+                  <p className="text-neutral-400 text-sm">admin@awan-keusahawanan.com</p>
                 </div>
                 <div>
                   <p className="text-white font-medium">Response Time</p>

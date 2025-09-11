@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server"
 import { monitoringService } from "@/lib/monitoring"
+import { withMonitoringLogging } from "@/lib/middleware/logging"
 import { withMonitoring } from "@/lib/middleware/monitoring"
+import { withGlobalErrorHandler, withRequestValidation } from "@/lib/middleware/error"
 
 /**
  * System Health Check API
@@ -27,4 +29,6 @@ async function handleGET() {
   }
 }
 
-export const GET = withMonitoring(handleGET)
+export const GET = withRequestValidation(withMonitoring(withMonitoringLogging(withGlobalErrorHandler(handleGET))), {
+  allowedMethods: ["GET"],
+})

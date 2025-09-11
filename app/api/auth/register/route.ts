@@ -1,11 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { hashPassword, generateToken } from "@/lib/auth"
+import { withAuthLogging } from "@/lib/middleware/logging"
+import { withMonitoring } from "@/lib/middleware/monitoring"
+import { withGlobalErrorHandler, withRequestValidation } from "@/lib/middleware/error"
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const SLUG_REGEX = /^[a-z0-9-]+$/
 
-export async function POST(request: NextRequest) {
+async function handlePOST(request: NextRequest) {
   try {
     const body = await request.json()
     const { name, email, password, workspaceName, workspaceSlug } = body
@@ -107,8 +110,9 @@ export async function POST(request: NextRequest) {
     console.error("Registration error:", error)
     
     // Handle specific Prisma errors
-    if (error?.code === 'P2002') {
-      const target = error?.meta?.target
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
+      const prismaError = error as any
+      const target = prismaError.meta?.target
       if (target?.includes('email')) {
         return NextResponse.json({ error: "Emel sudah digunakan" }, { status: 409 })
       }
@@ -125,3 +129,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Ralat dalaman pelayan" }, { status: 500 })
   }
 }
+
+export const POST = withRequestValidation(withMonitoring(withAuthLogging(withGlobalErrorHandler(handlePOST))), {
+  allowedMethods: ["POST"],
+  maxBodySize: 2048, // 2KB limit for registration requests
+})

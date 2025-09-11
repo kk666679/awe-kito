@@ -1,8 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/db"
 import { verifyPassword, generateToken } from "@/lib/auth"
+import { withAuthLogging } from "@/lib/middleware/logging"
+import { withMonitoring } from "@/lib/middleware/monitoring"
+import { withGlobalErrorHandler, withRequestValidation } from "@/lib/middleware/error"
 
-export async function POST(request: NextRequest) {
+async function handlePOST(request: NextRequest) {
   try {
     const { email, password } = await request.json()
 
@@ -52,3 +55,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Ralat dalaman pelayan" }, { status: 500 })
   }
 }
+
+export const POST = withRequestValidation(withMonitoring(withAuthLogging(withGlobalErrorHandler(handlePOST))), {
+  allowedMethods: ["POST"],
+  maxBodySize: 1024, // 1KB limit for login requests
+})

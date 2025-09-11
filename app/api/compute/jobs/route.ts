@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { withComputeLogging } from "@/lib/middleware/logging"
 import { withMonitoring, recordComputeMetric } from "@/lib/middleware/monitoring"
+import { withGlobalErrorHandler, withRequestValidation } from "@/lib/middleware/error"
 
 /**
  * Compute Job Management API
@@ -24,7 +25,7 @@ async function handleGET(request: NextRequest) {
     const jobs = [
       {
         id: "job_gpu_12345",
-        type: "gpu",
+        jobType: "gpu",
         command: "ai-training",
         status: "running",
         progress: 65,
@@ -91,5 +92,11 @@ async function handlePOST(request: NextRequest) {
   }
 }
 
-export const GET = withMonitoring(withComputeLogging(handleGET))
-export const POST = withMonitoring(withComputeLogging(handlePOST))
+export const GET = withRequestValidation(withMonitoring(withComputeLogging(withGlobalErrorHandler(handleGET))), {
+  allowedMethods: ["GET"],
+})
+
+export const POST = withRequestValidation(withMonitoring(withComputeLogging(withGlobalErrorHandler(handlePOST))), {
+  allowedMethods: ["POST"],
+  maxBodySize: 4096, // 4KB limit for job submission
+})
