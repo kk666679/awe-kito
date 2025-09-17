@@ -447,42 +447,40 @@ class MonitoringService {
 
 ### Order Processing Flow
 
-```
-Customer Places Order (Commerce Cloud)
-           ↓
-    Webhook Notification
-           ↓
-    Awan Keusahawanan Receives Order
-           ↓
-    Inventory Check & Reserve
-           ↓
-    Payment Processing
-           ↓
-    Order Confirmation → Commerce Cloud
-           ↓
-    Fulfillment Process
-           ↓
-    Shipping Updates → Commerce Cloud
-           ↓
-    Delivery Confirmation
+```mermaid
+flowchart LR
+    subgraph CC ["Commerce Cloud"]
+        A["Customer Places Order"] --> B["Webhook Notification"]
+        F["Order Confirmation"] --> H["Shipping Updates"]
+    end
+
+    subgraph AW ["Awan Keusahawanan"]
+        B --> C["Receives Order"]
+        C --> D["Inventory Check & Reserve"]
+        D --> E["Payment Processing"]
+        E --> F
+        F --> G["Fulfillment Process"]
+        G --> H
+    end
+
+    H --> I["Delivery Confirmation"]
 ```
 
 ### Product Sync Flow
 
-```
-Product Updated (Awan Keusahawanan)
-           ↓
-    Change Detection
-           ↓
-    Data Transformation
-           ↓
-    Multi-Store Distribution
-           ↓
-    Commerce Cloud APIs
-           ↓
-    Sync Confirmation
-           ↓
-    Error Handling (if needed)
+```mermaid
+flowchart LR
+    subgraph AW ["Awan Keusahawanan"]
+        A["Product Updated"] --> B["Change Detection"]
+        B --> C["Data Transformation"]
+        C --> D["Multi-Store Distribution"]
+    end
+
+    subgraph CC ["Commerce Cloud"]
+        D --> E["Commerce Cloud APIs"]
+        E --> F["Sync Confirmation"]
+        F --> G["Error Handling (if needed)"]
+    end
 ```
 
 ## Deployment Guidelines
